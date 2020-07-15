@@ -7,6 +7,19 @@ def fibonacciRecursive(n):  # 递归
         return fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2)
 
 
+dict_fib = {}
+
+
+def fibonacciRecursiveRecord(n):        # 递归 加记录
+    if n <= 2:
+        return 1
+    elif dict_fib.get(n):
+        return dict_fib.get(n)
+    else:
+        dict_fib[n] = fibonacciRecursiveRecord(n-1) + fibonacciRecursiveRecord(n-2)
+        return dict_fib[n]
+
+
 def fibonacciIterateFor(n):  # 迭代
     if n <= 0:
         return 0
@@ -76,6 +89,8 @@ if __name__ == '__main__':
     num = 10
     # for i in range(1, num+1):
     #     print(fibonacciRecursive(i))
+    print(fibonacciRecursiveRecord(num))
+    print(dict_fib)
     # for i in range(1, num+1):
     #     print(fibonacciIterateFor(i))
     # for i in range(1, num + 1):
@@ -87,4 +102,4 @@ if __name__ == '__main__':
     # fibonacci = Fibonacci(num)
     # for fibNum in fibonacci:
     #     print(fibNum)
-    print(fibonacciMatrix(num))
+    # print(fibonacciMatrix(num))
