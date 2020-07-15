@@ -1,6 +1,6 @@
 def fibonacciRecursive(n):      # 递归
     if n <= 0:
-        return '请输入正整数'
+        return 0
     elif n == 1:
         return n
     else:
@@ -9,13 +9,13 @@ def fibonacciRecursive(n):      # 递归
 
 def fibonacciIterate(n):        # 迭代
     if n <= 0:
-        return '请输入正整数'
+        return 0
     a, b = 0, 1
-    for i in range(1, n+1):
+    for i in range(1, n):
         a, b = b, a + b
-    return a
+    return b
 
 
 if __name__ == '__main__':
-    print(fibonacciRecursive(1))
-    print(fibonacciIterate(1))
+    print(fibonacciRecursive(5))
+    print(fibonacciIterate(5))
