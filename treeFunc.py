@@ -80,6 +80,22 @@ class Tree(object):
         else:
             return max(self.getHeight(node.left), self.getHeight(node.right)) + 1
 
+    def minDepth(self):
+        if self.root is None:
+            return 0
+        queue = [self.root]
+        minHeight = 1
+        while queue:
+            popNode = queue.pop(0)
+            if popNode.left is None or popNode.right is None or popNode.left.val == -1 or popNode.right.val == -1:
+                return minHeight
+            if popNode.left is not None and popNode.left.val != -1:
+                queue.append(popNode.left)
+            if popNode.right is not None and popNode.right.val != -1:
+                queue.append(popNode.right)
+            minHeight += 1
+        return minHeight
+
     def isBalance(self, node):
         if node is None or node.val == -1:
             return True
@@ -103,6 +119,25 @@ class Tree(object):
                 queue.append(popNode.right)
         return result
 
+    def isCompleteness(self):
+        if self.root is None:
+            return True
+        nodes = [self.root]
+        val = [self.root.val]
+        while nodes:
+            node = nodes.pop(0)
+            if node.left:
+                nodes.append(node.left)
+                val.append(node.left.val)
+            if node.right:
+                nodes.append(node.right)
+                val.append(node.right.val)
+        try:
+            val.index(-1)
+            return False
+        except:
+            return True
+
 
 if __name__ == '__main__':
     tree = Tree()
@@ -117,4 +152,6 @@ if __name__ == '__main__':
     # print(tree.getHeight(tree.root))
     # print(tree.isBalance(tree.root))
     # 树的BFS
-    print(tree.BFSTree())
+    # print(tree.BFSTree())
+    # print(tree.minDepth())
+    print(tree.isCompleteness)
