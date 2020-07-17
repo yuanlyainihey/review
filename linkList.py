@@ -1,4 +1,4 @@
-class Node(object):
+class SingleNode(object):
     def __init__(self, elem):
         self.elem = elem
         self.next = None
@@ -28,12 +28,12 @@ class SingleLinkList(object):
         return linkLists
 
     def add(self, item):
-        node = Node(item)
+        node = SingleNode(item)
         node.next = self.__head
         self.__head = node
 
     def append(self, item):
-        node = Node(item)
+        node = SingleNode(item)
         if self.isEmpty():
             self.__head = node
         else:
@@ -53,7 +53,7 @@ class SingleLinkList(object):
             while count < pos - 1:
                 count += 1
                 cur = cur.next
-            node = Node(item)
+            node = SingleNode(item)
             node.next = cur.next
             cur.next = node
 
@@ -79,6 +79,42 @@ class SingleLinkList(object):
             else:
                 cur = cur.next
         return False
+
+
+class DoubleNode(object):
+    def __init__(self, data):
+        self.data = data
+        self.next = None
+        self.previous = None
+
+    def hasValue(self, value):
+        if self.data == value:
+            return True
+        else:
+            return False
+
+
+class DoubleLinkedList(object):
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def length(self):
+        count = 0
+        cur = self.head
+        while cur is not None:
+            count += 1
+            cur = cur.next
+        return count
+
+    def travel(self):
+        linkLists = []
+        cur = self.head
+        while cur is not None:
+            linkLists.append(cur.elem)
+            cur = cur.next
+        return linkLists
+
 
 if __name__ == "__main__":
     linkList = SingleLinkList()

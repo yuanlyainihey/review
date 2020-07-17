@@ -1,0 +1,31 @@
+查看 Linux 剩余内存：
+    free -m
+    物理已用内存 = 实际已用内存 - 缓冲 - 缓存 = 6811M - 350M - 5114M
+    物理空闲内存 = 总物理内存 - 实际已用内存 + 缓冲 + 缓存 
+    应用程序可用空闲内存 = 总物理内存 - 实际已用内存 
+    应用程序已用内存 = 实际已用内存 - 缓冲 - 缓存
+
+linux查看端口占用情况：
+    1，lsof -i:端口号                   用以显示符合条件的进程情况
+    2，netstat -tunlp|grep 端口号       用于显示tcp，udp的端口和进程等相关情况
+
+查看一个程序的pid以及所有子进程：
+    1.利用进程名获取进程号
+        ps -ef|grep syslog|grep -v "grep"
+    2.利用进程号查看该进程下的线程
+        ps -eLf|grep 722|grep -v "grep"
+
+Linux为目录下所有文件添加可写权限：
+    1、更改文件用户组：使用命令chgrp
+    2、更改文件所有者：使用命bai令chown
+    3、chown命令可以同bai时修改所有者和用户组名称（即拥有chgrp的功能），命令如下：# chown [-R] 新用户名:新用户组名 filename
+    4、更改文件的属性，linux下用户分为三种：owner/group/other,即文件拥有者，同用户组，和其他人。并且每个组别都有对应的可读可写可执行权限（-rwx），可以用数字来代替属性。
+
+linux修改ip地址方法：
+    1. 查看ip地址：ifconfig
+    2. 修改网卡的配置文件
+    3. BOOTPROTO：none（禁止dhcp），static(静态IP)，dhcp（自动获取）
+    3. 修改BOOTPROTO的参数为static，然后创建两个新参数IPADDR和NETMASK。
+
+linux多路复用：
+    复用的意思时不用每个进程/线程来操控单独的一个IO，只需一个进程/线程来操控多个IO.

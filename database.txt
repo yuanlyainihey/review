@@ -1,0 +1,143 @@
+MySQL锁有几种，死锁是怎么产生的：
+    常见的MYSQL锁有三种级别：页级、表级、行级
+        表级锁：开销小，加锁快；不会出现死锁；锁定粒度大，发生锁冲突的概率最高,并发度最低。
+        行级锁：开销大，加锁慢；会出现死锁；锁定粒度最小，发生锁冲突的概率最低,并发度也最高。
+        页面锁：开销和加锁时间界于表锁和行锁之间；会出现死锁；锁定粒度界于表锁和行锁之间，并发度一般。
+    所谓死锁: 是指两个或两个以上的进程在执行过程中,因争夺资源而造成的一种互相等待的现象,若无外力作用,它们都将无法推进下去.此时称系统处于死锁状态或系统产生了死锁,这些永远在互相等竺的进程称为死锁进程.表级锁不会产生死锁.
+
+MySQL的char varchar text的区别：
+    1）char：定长格式，长度范围是0~255
+    2）varchar：变长格式，在5.0.3以下的版本中的最大长度限制为255，而在5.0.3及以上的版本中，varchar数据类型的长度支持到了65535
+    3）text:text不可以有默认值，其最大长度是2的16次方-1
+
+join五种连接方式：
+1. 内连接
+    1. 显性内连接（INNER JOIN）     select * from a INNER JOIN b on a.id = b.id
+    2. 隐形内连接（WHERE）
+2. 左连接/左外连接（LEFT JOIN / LEFT OUTER JOIN）
+3. 右连接/右外连接（RIGHT JOIN / RIGHT OUTER JOIN）
+4. 全连接（FULL JOIN）
+5. 交叉连接（CROSS JOIN）
+    1. 被连接两个表的笛卡尔乘积     select * from a CROSS JOIN b
+    2. 匹配条件成立的行数           select * from a CROSS JOIN b where
+
+inner join、left join和right join的优化方法：
+a.找出驱动表和被驱动表，在被驱动表上建立索引，可提高连接性能。
+b.内连接inner join和左连接left join差不多,都需要优化右表。而右连接right join需要优化左表。
+比较：左连接和内连接优于右连接，左连接和内连接的比较取决于需求，单纯看性能是差不多的。
+备注：索引一般为主键、唯一索引、前缀索引等；左连接left join中，左表为驱动表，右表为被驱动表；右连接right join中，右表为驱动表，左表为被驱动表。
+
+索引类型有几种，BTree索引和hash索引的区别：
+    mysql的索引分为单列索引(主键索引,唯一索引,普通索引)和组合索引.
+        单列索引:一个索引只包含一个列,一个表可以有多个单列索引.
+        组合索引:一个组合索引包含两个或两个以上的列
+    BTree索引不仅可以被用在=,>,>=,<,<=和between这些比较操作符上，而且还可以用于like操作符，只要它的查询条件是一个不以通配符开头的常量
+    Hash索引只能用于对等比较，例如=,<=>（相当于=）操作符。由于是一次定位数据，不像BTree索引需要从根节点到枝节点，最后才能访问到页节点这样多次IO访问，所以检索效率远高于BTree索引。
+    1）Hash 索引仅仅能满足"=","IN"和"<=>"查询，不能使用范围查询。
+    2）Hash 索引无法被用来避免数据的排序操作。
+    3）Hash 索引不能利用部分索引键查询。
+    4）Hash 索引在任何时候都不能避免表扫描。
+
+设计索引的规则：
+最适合索引的列是出现在where子句中的列，或连接子句中指定的列，而不是出现在select关键字后的选择列表中的列。
+索引的列的基数越大，索引的效果越好。
+尽量使用短索引。能够节省大量索引空间，也可能使查询更快。
+不要过度索引。索引都要占用额外的磁盘空间，并降低写操作的性能。在修改表的内容时，索引必须进行更新，有时可能需要重构。
+
+关系型数据库和非关系型数据库：
+    关系型数据库：SQLite, SQL Server, MySQL, ORACLE
+        关系型数据库最典型的数据结构是表，由二维表及其之间的联系所组成的一个数据组织。
+        优点：
+        1、易于维护：都是使用表结构，格式一致；
+        2、使用方便：SQL语言通用，可用于复杂查询；
+        3、复杂操作：支持SQL，可用于一个表以及多个表之间非常复杂的查询。
+        缺点：
+        1、读写性能比较差，尤其是海量数据的高效率读写；
+        2、固定的表结构，灵活度稍欠；
+        3、高并发读写需求，传统关系型数据库来说，硬盘I/O是一个很大的瓶颈。
+    非关系型数据库：redis, mongoDB, HBASE, CouchDB
+        非关系型数据库严格上不是一加粗样式种数据库，应该是一种数据结构化存储方法的集合，可以是文档或者键值对等
+        优点：
+        1、格式灵活：存储数据的格式可以是key,value形式、文档形式、图片形式等等，文档形式、图片形式等等，使用灵活，应用场景广泛，而关系型数据库则只支持基础类型。
+        2、速度快：nosql可以使用硬盘或者随机存储器作为载体，而关系型数据库只能使用硬盘；
+        3、高扩展性；
+        4、成本低：nosql数据库部署简单，基本都是开源软件。
+        缺点：
+        1、不提供sql支持，学习和使用成本较高；
+        2、无事务处理；
+        3、数据结构相对复杂，复杂查询方面稍欠。
+
+redis有几种常用存储类型：String, List, set, sorted set, hash
+
+如何修改Redis数据库的库的个数，Redis数据库如何设置密码：
+    数据库的数量是可以配置的,默认情况下是16个。修改redis 目录下redis.windows.conf下的databases指令:databases 4
+    Redis的hash槽的个数是2**14=16384个
+    设置密码的途径通过直接修改配置文件即可：/etc/redis/redis.conf   requirepass your_strong_password
+
+Redis数据库如何实现持久化：RDB,AOF
+    原因：redis是一个基于内存的数据库，故在redis正在运行的数据都在内存中，而内存掉电，内存上所以数据都会消失。故把redis当成数据库使用时就需要对redis进行持久化。
+    redis有两种持久化数据的方式：
+        save：前台更新数据，如果使用这种方法持久化，那么只能在服务器停机维护时，发生因为它会阻塞redis进程造成redis的服务不可用。
+        bgsave：后台运行，该命令的原理是，创建一个子进程来进行redis的持久化，而redis依然提供服务。
+    RDB：在指定的时间间隔能对你的数据进行快照存储
+    AOF：把对redis操作的操作记录，通过日志的方式记录下来，这样想要恢复数据库文件，只需要把所以指令执行一遍就行。
+    Redis使用AOF方式持久化，aof文件不断增大，如何处理：
+        Redis 可以在 AOF 文件体积变得过大时，自动地在后台对 AOF 进行重写： 重写后的新 AOF 文件包含了恢复当前数据集所需的最小命令集合。 整个重写操作是绝对安全的，因为 Redis 在创建新 AOF 文件的过程中，会继续将命令追加到现有的 AOF 文件里面，即使重写过程中发生停机，现有的 AOF 文件也不会丢失。 而一旦新 AOF 文件创建完毕，Redis 就会从旧 AOF 文件切换到新 AOF 文件，并开始对新 AOF 文件进行追加操作。
+
+hash表是如何生成的：
+class Slot(object):
+    def __init__(self, key, value):
+        self.key, self.value = key, value
+
+MySQL数据库语句：
+展示数据库       SHOW DATABASES
+创建数据库       CREATE DATABASE name    （DEFAULT CHARSET utf8 COLLATE utf8_general_ci）
+使用数据库       USE name
+删除数据库       DROP DATABASE name
+创建数据表       CREATE TABLE table_name (column_name column_type)
+删除数据表       DROP TABLE table_name
+插入语句         INSERT INTO table_name ( field1, field2,...fieldN )VALUES( value1, value2,...valueN )
+查询语句         SELECT column_name,column_name FROM table_name
+                SELECT * FROM table_name
+WHERE           SELECT field1 FROM table_name1 WHERE requirement
+ORDER BY        SELECT field table_name ORDER BY 'id' ASC|DESC      升序|降序
+LIMIT           SELECT * FROM `table_name` WHERE `id` LIMIT 0,5;    指定开始位置和显示条数
+修改语句         UPDATE table_name SET field1='value' WHERE `id`>10
+删除语句         DELETE FROM table_name WHERE `id`>10
+
+MySQL数据库的慢查询：慢查询日志，记录MySQL中响应时间超过阈值的语句
+    查看慢SQL是否启用，查看命令：show variables like 'log_slow_queries';
+    开启慢查询命令：set global log_slow_queries = on;
+    查看慢查询参数，即设置超过多少秒的查询归为了慢查询。
+    参数为：long_query_time
+    查询命令： show global variables like 'long_query_time';
+    mysql默认时间为10秒，即10秒及以上的查询被归为了慢查询。
+    设置命令：set global long_query_time =1;用命令设置的，会立即生效，不用重启mysql服务。但重启mysql服务后就会失效。
+    查看慢查询存放日志，命令： show variables like 'slow_query_log_file';
+
+MySQL数据库如何进行查询优化：
+    1. 优化数据类型
+        1. 避免使用NULL
+        2. 尽可能使用更小的字段
+    2. 字符集转换
+    3. 优化count(*)
+    4. 优化子查询
+    5. 优化union 不在乎重复行的话用union all
+
+Redis过期策略：
+    定期删除：在设置键的过期时间的时候创建一个定时器，当过期时间到的时候立马执行删除操作。
+    惰性删除：惰性删除策略不会在键过期的时候立马删除，而是当外部指令获取这个键的时候才会主动删除。处理过程为：接收get执行、判断是否过期（这里按过期判断）、执行删除操作、返回nil（空）。
+    定期删除：定期删除是设置一个时间间隔，每个时间段都会检测是否有过期键，如果有执行删除操作。
+Redis的淘汰机制：
+    内存淘汰机制：
+        redis.conf中配置：maxmemory-policy noeviction 当内存使用达到阈值的时候，所有引起申请内存的命令会报错。
+
+正向代理和反向代理：
+    正向代理：顺着请求的方向进行的代理，即代理服务器是由你配置为你服务，去请求目标服务器地址。
+    反向代理：代理服务器是为目标服务器服务的，虽然整体的请求返回路线都是一样的都是Client到Proxy到Server。
+        现实中我们通过访问百度的代理服务器后，代理服务器给我们转发请求到他们N多的服务器节点中的一个给我们进行搜索后将结果返回。
+
+如果很多请求同时对Redis的同一个键进行访问，如何保证数据安全：
+    问高并发下Redis如何保持数据一致性：避免先读后写；
+    对key加锁
+
