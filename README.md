@@ -1,7 +1,11 @@
 # review
-算法复习
+
+0. something.txt
 1. sorting
-2. treeFunc
-3. fibonacci
-4. linkList
-5. ...
+2. dynamic programming
+3. greedy
+4. Fibonacci
+5. treeFunc
+6. linkList
+7. hashTable
+8. ...
