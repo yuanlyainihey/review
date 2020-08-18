@@ -16,3 +16,8 @@ class Solution:
             return True
         else:
             return False
+
+if __name__ == '__main__':
+    s = Solution()
+    t = s.canJump([2,3,1,1,4])
+    print(t)
